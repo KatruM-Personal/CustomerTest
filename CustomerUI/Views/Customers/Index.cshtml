@@ -4,21 +4,19 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8">
-            <!-- Adjust column width as needed -->
             <h1>Customers</h1>
-
-            @if (Model.Any())
-            {
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
                         @foreach (var customer in Model)
                         {
                             <tr>
@@ -31,16 +29,29 @@
                                 </td>
                             </tr>
                         }
-                    </tbody>
-                </table>
-            }
-            else
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="nodata">No customers found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (Model.Any())
             {
-                <p>Customers data not found.</p>
+                @if (Model.Count() > 1)
+                {
+                    <p class="datafound">@Model.Count() records found</p>
+
+                }
+                else
+                {
+                    <p class="datafound">@Model.Count() record found</p>
+                }
             }
         </div>
         <div class="col-md-4 text-right">
-            <!-- Adjust column width as needed -->
             <p>
                 <a href="/Customers/Create" class="btn btn-success">Add New Customer</a>
             </p>
@@ -79,4 +90,15 @@
         .table .actions {
             white-space: nowrap;
         }
+
+        .table .nodata {
+            border: 0px;
+            color: red;
+        }
+
+    .datafound {
+        border: 0px;
+        color: green;
+        font-weight: bold;
+    }
 </style>

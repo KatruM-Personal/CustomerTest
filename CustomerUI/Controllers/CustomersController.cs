@@ -19,9 +19,19 @@ namespace CustomerUI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewData["Title"] = "Customer List";
-            var customers = await _httpClient.GetFromJsonAsync<List<Customer>>("api/Customers");
-            return View(customers);
+            try
+            {
+                ViewData["Title"] = "Customer List";
+                var customers = await _httpClient.GetFromJsonAsync<List<Customer>>("api/Customers");
+                return View(customers);
+            }
+            catch (HttpRequestException ex)
+            {
+                // Log the exception or handle it appropriately
+                _logger.LogError(ex, "Error retrieving customer list");
+                ViewData["ErrorMessage"] = "Failed to retrieve customer list. Please try again later.";
+                return View(new List<Customer>()); // Return an empty list or handle differently as per your application logic
+            }
         }
 
         public IActionResult Create()
@@ -33,13 +43,23 @@ namespace CustomerUI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Customer customer)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var response = await _httpClient.PostAsJsonAsync("api/Customers", customer);
-                if (response.IsSuccessStatusCode)
-                    return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    var response = await _httpClient.PostAsJsonAsync("api/Customers", customer);
+                    if (response.IsSuccessStatusCode)
+                        return RedirectToAction(nameof(Index));
+                }
+                return View(customer);
             }
-            return View(customer);
+            catch (HttpRequestException ex)
+            {
+                // Log the exception or handle it appropriately
+                _logger.LogError(ex, "Error creating new customer");
+                ModelState.AddModelError("", "Failed to create customer. Please try again later.");
+                return View(customer);
+            }
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -63,6 +83,7 @@ namespace CustomerUI.Controllers
             catch (HttpRequestException ex)
             {
                 // Log the exception or handle it appropriately
+                _logger.LogError(ex, "Error retrieving customer for edit");
                 ModelState.AddModelError("", "Failed to retrieve customer. Please try again later.");
                 return View();
             }
