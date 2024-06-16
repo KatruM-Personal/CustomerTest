@@ -76,11 +76,11 @@ This is a simple Customer Management application built using ASP.NET Core 6. The
 
 ## API Endpoints
 
-- `GET /api/customers`: Retrieve a list of all customers
-- `GET /api/customers/{id}`: Retrieve a specific customer by ID
-- `POST /api/customers`: Create a new customer
-- `PUT /api/customers/{id}`: Update an existing customer
-- `DELETE /api/customers/{id}`: Delete a customer
+- `GET /api/Customers`: Retrieve a list of all customers
+- `GET /api/Customers/{id}`: Retrieve a specific customer by ID
+- `POST /api/Customers`: Create a new customer
+- `PUT /api/Customers/{id}`: Update an existing customer
+- `DELETE /api/Customers/{id}`: Delete a customer
 
 ## Validation
 
